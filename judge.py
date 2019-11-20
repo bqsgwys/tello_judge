@@ -140,7 +140,7 @@ def sub_thread(topic, callback):
 if __name__ == '__main__':
     # initiate
     groupid = '/group'+str(1)    # your group id
-    targets = [1,2,3]            # your targets id
+    targets = [1,2,3]            # your target box id
 
     score = 0
     is_fail = False
