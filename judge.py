@@ -30,7 +30,7 @@ def scoreTakeoff(data, groupid):
 
         score_lock.acquire()
         if not already_takeoff:
-            score += 20
+            score += 10
             already_takeoff = True
         score_lock.release()
 
@@ -129,6 +129,7 @@ def done(data, groupid):
         time_end_lock.acquire()
         time_end = time.time()
         time_end_lock.release()
+        score += 10
         
     print('done: ',score,time_end-time_start)
 
