@@ -165,5 +165,8 @@ if __name__ == '__main__':
     done_sub_thread = threading.Thread(target = sub_thread, args=(groupid+"/done", done))
     done_sub_thread.start()
     
+    print("judge started, input any digit and press \\n to quit")
+    
     input()
-
+    
+    print("finished")
