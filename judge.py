@@ -18,9 +18,6 @@ already_seentarget = [False, False, False]
 score_lock = threading.Lock()
 time_start_lock = threading.Lock()
 time_end_lock = threading.Lock()
-target1_lock = threading.Lock()
-target2_lock = threading.Lock()
-target3_lock = threading.Lock()
 
 def scoreTakeoff(data, groupid):
     global score,time_start,already_takeoff,is_fail
@@ -142,17 +139,14 @@ def sub_thread(topic, callback):
 
 if __name__ == '__main__':
     # initiate
-    #global score, time_start, time_end
-    #global already_takeoff, already_seenfire, already_seentarget
-    #global tragets, is_fail
-    #global fail_pub
+    groupid = '/group'+str(1)    # your group id
+    targets = [1,2,3]            # your targets id
+
     score = 0
     is_fail = False
     already_takeoff = False
     already_seenfire = False
     already_seentarget = [False, False, False]
-    groupid = '/group'+str(1)
-    targets = [1,2,3]
 
     rospy.init_node('judge', anonymous=True)
 
@@ -172,18 +166,4 @@ if __name__ == '__main__':
     done_sub_thread.start()
     
     input()
-
-
-    '''
-    rcvd_pub = rospy.Publisher(groupid+'/received', Int16, queue_size=3)
-    tgt1_pub = rospy.Publisher(groupid+'/receviedtarget1', Int16, queue_size=3)
-    tgt2_pub = rospy.Publisher(groupid+'/receviedtarget2', Int16, queue_size=3)
-    tgt3_pub = rospy.Publisher(groupid+'/receviedtarget3', Int16, queue_size=3)
-
-    rospy.Subscriber("/groupid/takeoff", Int16, scoreTakeoff)
-    rospy.Subscriber("/groupid/seenfire", Int16, scoreFire)
-    rospy.Subscriber("/groupid/seentarget1", Int16, scoreTgt1)
-    rospy.Subscriber("/groupid/seentarget2", Int16, scoreTgt2)
-    rospy.Subscriber("/groupid/seentarget3", Int16, scoreTgt3)
-    rospy.Subscriber("/groupid/done", Int16, done)'''
 
