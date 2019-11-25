@@ -4,12 +4,16 @@
 import time
 import rospy
 import threading
-from std_msgs.msg import String,Int16,Bool
+from random import sample
+from std_msgs.msg import Int16
 
-global score, time_start, time_end
+
+global score, time_start, time_end, aims
 global already_takeoff, already_seenfire, already_seentarget
 global targets, is_fail
 global fail_pub
+
+aims = sample([1, 2, 3, 4, 5], 3)
 score = 0
 if_fail = False
 already_takeoff = False
@@ -20,13 +24,19 @@ time_start_lock = threading.Lock()
 time_end_lock = threading.Lock()
 
 def scoreTakeoff(data, groupid):
-    global score,time_start,already_takeoff,is_fail
+    global score,time_start,already_takeoff,is_fail,aims
     ready = data.data
     if is_fail:
         return
     if ready:
         rcvd_pub = rospy.Publisher(groupid+'/received', Int16, queue_size=3)
         rcvd_pub.publish(1)
+        rcvd_pub = rospy.Publisher(groupid+'/target1', Int16, queue_size=3)
+        rcvd_pub.publish(aims[0])
+        rcvd_pub = rospy.Publisher(groupid+'/target2', Int16, queue_size=3)
+        rcvd_pub.publish(aims[1])
+        rcvd_pub = rospy.Publisher(groupid+'/target3', Int16, queue_size=3)
+        rcvd_pub.publish(aims[2])
 
         score_lock.acquire()
         if not already_takeoff:
@@ -140,9 +150,8 @@ def sub_thread(topic, callback):
 
 if __name__ == '__main__':
     # initiate
-    groupid = '/group'+str(1)    # your group id
+    groupid = '/group' + str(1)  # your group id
     targets = [1,2,3]            # your target box id
-
     score = 0
     is_fail = False
     already_takeoff = False
