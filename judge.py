@@ -29,14 +29,10 @@ def scoreTakeoff(data, groupid):
     if is_fail:
         return
     if ready:
-        rcvd_pub = rospy.Publisher(groupid+'/received', Int16, queue_size=3)
-        rcvd_pub.publish(1)
-        rcvd_pub = rospy.Publisher(groupid+'/target1', Int16, queue_size=3)
-        rcvd_pub.publish(aims[0])
-        rcvd_pub = rospy.Publisher(groupid+'/target2', Int16, queue_size=3)
-        rcvd_pub.publish(aims[1])
-        rcvd_pub = rospy.Publisher(groupid+'/target3', Int16, queue_size=3)
-        rcvd_pub.publish(aims[2])
+        rcvd_pub_r.publish(1)
+        rcvd_pub_t1.publish(aims[0])
+        rcvd_pub_t2.publish(aims[1])
+        rcvd_pub_t3.publish(aims[2])
 
         score_lock.acquire()
         if not already_takeoff:
@@ -161,7 +157,10 @@ if __name__ == '__main__':
     rospy.init_node('judge', anonymous=True)
 
     fail_pub = rospy.Publisher(groupid+'/failure', Int16, queue_size=3)
-
+    rcvd_pub_r = rospy.Publisher(groupid+'/received', Int16, queue_size=3)
+    rcvd_pub_t1 = rospy.Publisher(groupid+'/target1', Int16, queue_size=3)
+    rcvd_pub_t2 = rospy.Publisher(groupid+'/target2', Int16, queue_size=3)
+    rcvd_pub_t3 = rospy.Publisher(groupid+'/target3', Int16, queue_size=3)
     takeoff_sub_thread = threading.Thread(target = sub_thread, args=(groupid+"/takeoff", scoreTakeoff))
     takeoff_sub_thread.start()
     fire_sub_thread = threading.Thread(target = sub_thread, args=(groupid+"/seenfire", scoreFire))
